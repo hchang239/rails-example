@@ -1,3 +1,17 @@
+/ provide vs. content_for
+/ 'content_for' is used to concatenate streaming contents into one place. For example,
+/ content_for(:title, "Hello")
+/ content_for(:title, ", world!")
+/ #=> generates "Hello, world!"
+/ On the other hand,
+/ provide(:title, "Hello")
+/ provide(:title, ", world!")
+/ #=> generates ", world!"
+
+- provide :title, 'Home'
+
 %h1 Sample App
 %p
-  This is the home page for the test page
+  This is the home page for the
+  = link_to "Ruby on Rails Tutorial", "http://www.railstutorial.org/"
+  sample application
