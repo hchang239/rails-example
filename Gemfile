@@ -31,7 +31,10 @@ group :development do
   gem 'spring'
 end
 
-gem "codeclimate-test-reporter", group: :test, require: nil
+group :test do
+  gem 'simplecov',                 require: false
+  gem "codeclimate-test-reporter", require: false
+end
 
 group :production do
   gem 'rails_12factor'

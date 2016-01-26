@@ -13,3 +13,6 @@
 /tmp
 
 .DS_Store
+
+# Ignore simplecov coverage file
+coverage
