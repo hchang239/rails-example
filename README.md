@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/hchang239/rails-example.svg?branch=master)](https://travis-ci.org/hchang239/rails-example)
-[![Test Coverage](https://codeclimate.com/github/hchang239/rails-example/badges/coverage.svg)](https://codeclimate.com/github/hchang239/rails-example/coverage)
+[![Build Status](https://semaphoreci.com/api/v1/projects/325b5f59-92a7-4e30-a6f3-7f99202ab37a/673693/shields_badge.svg)](https://semaphoreci.com/llss14/rails-example)
 [![Code Climate](https://codeclimate.com/github/hchang239/rails-example/badges/gpa.svg)](https://codeclimate.com/github/hchang239/rails-example)
+[![Test Coverage](https://codeclimate.com/github/hchang239/rails-example/badges/coverage.svg)](https://codeclimate.com/github/hchang239/rails-example/coverage)
 
 
 == README
