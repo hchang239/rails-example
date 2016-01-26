@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/hchang239/rails-example.svg?branch=master)](https://travis-ci.org/hchang239/rails-example)
+[![Test Coverage](https://codeclimate.com/github/hchang239/rails-example/badges/coverage.svg)](https://codeclimate.com/github/hchang239/rails-example/coverage)
+[![Code Climate](https://codeclimate.com/github/hchang239/rails-example/badges/gpa.svg)](https://codeclimate.com/github/hchang239/rails-example)
+
+
 == README
 
 This README would normally document whatever steps are necessary to get the
