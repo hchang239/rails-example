@@ -24,6 +24,7 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.0'
   gem 'guard-rspec', require: false
   gem 'factory_girl_rails'
+  gem 'fuubar'
 end
 
 group :development do

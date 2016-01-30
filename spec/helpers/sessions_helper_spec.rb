@@ -1,55 +1,68 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the SessionsHelper. For example:
-#
-# describe SessionsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe SessionsHelper, type: :helper do
-  let!(:user) { FactoryGirl.create(:user) }
+  let!(:user) { FactoryGirl.create(:user, remember_token: 'valid_token') }
 
-  describe 'Allow user to log_in and save the user_id to session' do
+  describe '#log_in(user)' do
     before { helper.log_in(user) }
-
     it { expect(session[:user_id]).to eq(user.id) }
   end
 
-  describe 'Return the current_user record' do
-    context 'current user has not login yet' do
-      it { expect(helper.current_user).to eq(nil) }
+  describe '#remember(user)' do
+    before { helper.remember user }
+
+    it { expect(cookies.signed[:user_id]).to eq(user.id) }
+    it { expect(cookies[:remember_token]).to eq(user.remember_token) }
+  end
+
+  describe '#current_user' do
+
+    context 'when user is already logged in' do
+      before { session[:user_id] = user.id }
+      it { expect(helper.current_user).to eq(user) }
     end
 
-    context 'the user just login and @current_user is initialized' do
-      before { helper.log_in(user) }
+    context 'when the user is logging in with remember_token' do
+      before do
+        allow(User).to receive(:find_by_id).with(user.id) { user }
+        allow(user).to receive(:authenticated?) { true }
+        cookies.signed[:user_id] = user.id
+      end
+
+      it { expect(session[:user_id]).to be_nil }
       it { expect(helper.current_user).to eq(user) }
     end
   end
 
-  describe 'Check if the current_user is logged in' do
+  describe '#logged_in?' do
+    subject { helper.logged_in? }
+
     context 'the user is not logged in' do
-      it { expect(helper.logged_in?).to eq(false) }
+      it { is_expected.to be false }
     end
 
     context 'the user is logged in' do
-      before { helper.log_in user }
-      it { expect(helper.logged_in?).to eq(true) }
+      before { allow(helper).to receive(:current_user) { user } }
+      it { is_expected.to be true }
     end
   end
 
-  describe 'the user is logged out' do
+  describe '#log_out' do
+    before { session[:user_id] = user.id }
+
+    it { expect{ helper.log_out }.to change{ session[:user_id] }.from(user.id).to(nil) }
+    it { expect(assigns(:current_user)).to be_nil }
+  end
+
+  describe '#forget' do
     before do
-      helper.log_in user
-      helper.current_user
-      helper.log_out
+      cookies.signed[:user_id] = user.id
+      cookies[:remember_token] = user.remember_token
+      allow(user).to receive(:forget)
+      helper.forget user
     end
 
-    it { expect(session[:user_id]).to eq(nil) }
-    it { expect(helper.current_user).to eq(nil) }
-    it { expect(helper.logged_in?).to eq(false) }
+    it { expect(cookies.signed[:user_id]).to be_nil }
+    it { expect(cookies[:remember_token]).to be_nil }
   end
 end

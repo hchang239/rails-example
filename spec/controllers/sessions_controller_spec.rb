@@ -34,6 +34,11 @@ RSpec.describe SessionsController, type: :controller do
   describe 'DELETE #destroy' do
     before { delete :destroy }
 
+    context 'when the user is not logged in' do
+      before { allow(controller).to receive(:logged_in?) { false } }
+      it { expect(controller).to_not receive(:log_out) }
+    end
+
     it { should redirect_to(root_url) }
   end
 

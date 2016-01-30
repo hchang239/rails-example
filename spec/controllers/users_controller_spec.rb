@@ -24,7 +24,7 @@ RSpec.describe UsersController, type: :controller do
     it { should render_template('show') }
   end
 
-  describe 'permit user_params and successful creation' do
+  describe '#user_params' do
     let(:params) { { user: FactoryGirl.attributes_for(:user) } }
 
     it { should permit(:name, :email, :password, :password_confirmation)

@@ -17,6 +17,8 @@ RSpec.describe UsersHelper, type: :helper do
     let(:gravatar_url) { "https://secure.gravatar.com/avatar/#{gravatar_id}" }
     subject { helper.gravatar_for(user) }
 
-    it { is_expected.to eq(image_tag(gravatar_url, alt: user.name, class: 'gravatar')) }
+    it { is_expected.to include(gravatar_id) }
+    it { is_expected.to include(gravatar_url) }
+    it { is_expected.to include(user.name) }
   end
 end
