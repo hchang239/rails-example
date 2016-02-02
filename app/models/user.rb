@@ -12,7 +12,9 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
 
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  # has_secure_password validates presence of password for a new user by default
+  # Thus 'allow_nil: true' will allow the user to pass nil password for editing profile
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
   # Returns the hash digest of the given string
   def User.digest(string)

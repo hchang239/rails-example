@@ -1,0 +1,16 @@
+- provide :title, 'All users'
+
+%h1 All users
+
+.flickr_pagination
+  .page_info
+    = page_entries_info @users
+  = will_paginate
+
+%ul.users
+  / Rails will automatically iterate through @users and render each record with
+  / _user.html partial
+  = render @users
+
+.flickr_pagination
+  = will_paginate
