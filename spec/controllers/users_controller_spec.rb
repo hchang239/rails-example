@@ -73,8 +73,8 @@ RSpec.describe UsersController, type: :controller do
 
       it { expect(assigns(:user)).to eq(user) }
       it { expect(user.save).to be true }
-      it { should set_flash[:success] }
-      it { should redirect_to user }
+      it { should set_flash[:info] }
+      it { should redirect_to root_url }
     end
 
     context 'when user sends invalid form' do

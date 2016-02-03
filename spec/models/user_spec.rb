@@ -52,23 +52,23 @@ RSpec.describe User, type: :model do
     it { expect(user.remember_digest).to eq('sample_token_digest')}
   end
 
-  describe '#authenticated?(remember_token)' do
+  describe '#authenticated?(attribute, token)' do
     let!(:digest) { BCrypt::Password.create('valid token') }
     let!(:user) { FactoryGirl.create(:user, remember_digest: digest) }
 
     context 'when remember_token is valid' do
-      subject { user.authenticated?('valid token') }
+      subject { user.authenticated?(:remember, 'valid token') }
       it { is_expected.to be true }
     end
 
     context 'when remember_token is invalid' do
-      subject { user.authenticated?(nil) }
+      subject { user.authenticated?(:remember, nil) }
       it { is_expected.to be false }
     end
 
     context 'when the user has no digest' do
       before { user.remember_digest = nil }
-      subject { user.authenticated?('token') }
+      subject { user.authenticated?(:remember, 'token') }
       it { is_expected.to be false }
     end
   end
