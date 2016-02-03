@@ -16,7 +16,7 @@ User.create!(
   activated_at: Time.zone.now
 )
 
-99.times do
+49.times do
   User.create!(
     name:  Faker::Name.name,
     email: Faker::Internet.email,
@@ -25,4 +25,10 @@ User.create!(
     activated: true,
     activated_at: Time.zone.now
   )
+end
+
+users = User.order(:created_at).take(10)
+40.times do
+  content = Faker::Lorem.sentence(5)
+  users.each { |user| user.microposts.create!(content: content) }
 end

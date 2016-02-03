@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  it { should have_many(:microposts).dependent(:destroy) }
+
   it { should have_db_column(:name).of_type(:string) }
   it { should have_db_column(:email).of_type(:string) }
   it { should allow_values('valid@email.com', 'another_valid.email@example.com').for(:email) }

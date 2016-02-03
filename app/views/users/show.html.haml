@@ -6,3 +6,10 @@
       %h1
         = gravatar_for @user
         = @user.name
+  .col-md-8
+    - if @microposts.any?
+      %h3= "Microposts #{ @user.microposts.count }"
+      %ol.microposts
+        = render @microposts
+      .flickr_pagination
+        = will_paginate @microposts
