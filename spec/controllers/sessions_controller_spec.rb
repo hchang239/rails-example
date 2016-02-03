@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SessionsController, type: :controller do
 
-  # it { should route(:get, login_path).to('sessions#new') }
+  it { should route(:get, login_path).to('sessions#new') }
   it { should route(:post, login_path).to('sessions#create') }
   it { should route(:delete, logout_path).to('sessions#destroy') }
 
