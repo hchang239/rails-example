@@ -73,6 +73,13 @@ class User < ActiveRecord::Base
     reset_sent_at < 2.hours.ago
   end
 
+  def feed
+    # This is equivalent to self.microposts
+    # However this returns ActiveRecord::Relation
+    # self.microposts returns ActiveRecord::Associations::CollectionProxy
+    Micropost.where("user_id = ?", id)
+  end
+
   private
 
     def downcase_email

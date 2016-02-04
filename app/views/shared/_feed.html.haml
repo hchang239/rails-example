@@ -1,0 +1,7 @@
+- if @feed_items.any?
+  %ol.microposts
+    / This will render views/microposts/_micropost.html.haml
+    / because @feed_items has class Micropost
+    = render @feed_items
+  .flickr_pagination
+    = will_paginate @feed_items
