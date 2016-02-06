@@ -8,6 +8,7 @@ class CreateMicroposts < ActiveRecord::Migration
     end
 
     # Defines 'multiple key index'
+    # Multiple Key Index allows to search in subset
     add_index :microposts, [:user_id, :created_at]
   end
 end

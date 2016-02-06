@@ -2,10 +2,29 @@ class User < ActiveRecord::Base
   # create instance variable(@) and define getter & setter
   attr_accessor :remember_token, :activation_token, :reset_token
 
-  has_many :microposts, dependent: :destroy
-
   before_save   :downcase_email
   before_create :create_activation_digest
+
+  has_many :microposts, dependent: :destroy
+
+  # Tells rails what class should be used
+  # because association name is different from class_name
+  has_many :active_relationships, class_name:  'Relationship',
+                                  foreign_key: :follower_id,
+                                  dependent:   :destroy
+  has_many :passive_relationships, class_name:  'Relationship',
+                                   foreign_key: :followed_id,
+                                   dependent:   :destroy
+
+  # Eventually we want to call user.following to find all followed users by this
+  # source: :followed defines the source of the following array is the set of followed_ids
+  has_many :following, through: :active_relationships,  source: :followed
+
+  # user.followers returns all users who follow the current user
+  # source: :follower defines the source of the followers array in the set of follower_ids
+  # In this case, we don't need to set source because Rails will automatically find follower_id
+  # which is singularized :followers attribute
+  has_many :followers, through: :passive_relationships, source: :follower
 
   validates :name,  presence: true, length: { maximum: 50 }
   
@@ -77,7 +96,34 @@ class User < ActiveRecord::Base
     # This is equivalent to self.microposts
     # However this returns ActiveRecord::Relation
     # self.microposts returns ActiveRecord::Associations::CollectionProxy
-    Micropost.where("user_id = ?", id)
+
+    # following_ids is defined by ActiveRecord association which is equivalent to
+    # user.following.map(&:id) [Note: source of following is :followed]
+    # Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id)
+
+    # Instead of using ? for sanitizing, you can use hash:
+    #   .where("user_id IN (:following_ids) OR user_id = :user_id",
+    #          following_ids: following_ids, user_id: id)
+
+    # Optimize query with SQL subselect
+    following_ids = "SELECT followed_id FROM relationships
+                     WHERE   follower_id = :user_id"
+    Micropost.where("user_id IN (#{ following_ids }) OR user_id = :user_id", user_id: id)
+  end
+
+  # Follows a user
+  def follow(other_user)
+    active_relationships.create(followed_id: other_user.id)
+  end
+
+  # Unfollow a user
+  def unfollow(other_user)
+    active_relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  # Returns true if the current user is following the other user
+  def following?(other_user)
+    following.include?(other_user)
   end
 
   private

@@ -1,0 +1,7 @@
+/ @user is loaded by users#show
+- unless current_user? @user
+  #follow_form
+    - if current_user.following? @user
+      = render 'unfollow'
+    - else
+      = render 'follow'
